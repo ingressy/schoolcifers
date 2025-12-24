@@ -11,9 +11,12 @@ public class WindowManager {
 
         JFrame frame = new JFrame();
         JMenuBar menuBar = new JMenuBar();
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(panel);
+
         JMenu add = new JMenu("Hinzufügen");
         JMenu file = new JMenu("Datei");
-        JLabel label = new JLabel("");
 
         JMenuItem fileopen = new JMenuItem("Öffnen");
         JMenuItem filesave = new JMenuItem("Speichern");
@@ -24,7 +27,7 @@ public class WindowManager {
         JMenuItem fachadd = new JMenuItem("Fach");
         JMenuItem noteadd = new JMenuItem("Note");
 
-        frame.setTitle("Schoolcifers");
+        frame.setTitle("Schoolcijfers");
 
         frame.setJMenuBar(menuBar);
         menuBar.add(file);
@@ -39,25 +42,23 @@ public class WindowManager {
         add.add(fachadd);
         add.add(noteadd);
 
-        frame.add(label);
+        frame.add(scrollPane);
 
         frame.setSize(800, 300);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        filesaveas.addActionListener(e -> {
+            fileaction.saveas(frame, schuljahre);
+        });
+
         schuljahradd.addActionListener(e -> {
-            String [] erg = addaction.schuljahraddaction();
-            if (erg[0] == "leer") {
-                return;
-            }
-            Schuljahr schuljahr = new Schuljahr(erg[0],erg[1],erg[2]);
-            schuljahre.add(schuljahr);
+            Schuljahr schuljahr = interaction.schuljahr(schuljahre);
+            JLabel label = new JLabel(schuljahr.getnamefromschoolyear()+ " | "+schuljahr.getschuljahr()+ " | "+ schuljahr.getschule());
+            panel.add(label);
 
-            label.setText(schuljahr.getnamefromschoolyear()+ " | "+schuljahr.getschuljahr()+ " | "+ schuljahr.getschule());
-
-            //System.out.println(schuljahr.getnamefromschoolyear());
-            //System.out.println(schuljahr.getschuljahr());
-            //System.out.println(schuljahr.getschule());
+            panel.revalidate();
+            panel.repaint();
         });
     }
 }
